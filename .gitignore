@@ -1,0 +1,24 @@
+# Full dataset is hosted on Zenodo
+recordings/
+derived/
+
+# Large archives and local release packages
+*.zip
+*.7z
+*.tar
+*.tar.gz
+
+# Video and camera data must never be committed
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.bag
+
+# Python and editor files
+__pycache__/
+*.py[cod]
+.venv/
+.vscode/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,11 @@
+﻿class_id,raw_label,display_name,description,associated_protocols
+0,Walking,Standing/Walking,The participant is standing still or walking.,walk; sit; lie; fall
+1,Falling,Falling,Transition from an upright posture to a lying or prone posture on the floor.,fall
+2,Transition-LayFloor-to-Stand,Floor-to-Stand,Transition from a lying or prone posture on the floor to an upright standing posture.,fall
+3,Transition-Stand-to-Sit,Stand-to-Sit,Transition from an upright standing posture to a seated posture on a chair.,sit; lie
+4,Transition-Sit-to-LayBed,Sit-to-Lie,Transition from a seated posture to a lying posture on a bed or sofa.,lie
+5,Transition-LayBed-to-Sit,Lie-to-Sit,Transition from a lying posture on a bed or sofa to a seated posture.,lie
+6,Transition-Sit-to-Stand,Sit-to-Stand,Transition from a seated posture to an upright standing posture.,sit; lie
+7,Sit-Stationary,Sitting,The participant maintains a seated posture on a chair.,sit
+8,LayBed-Stationary,Lying Down,The participant maintains a supine or side-lying posture on a bed or sofa.,lie
+9,LayFloor-Stationary,Lying-on-Floor,The participant maintains a lying or prone posture on the floor.,fall

@@ -1,0 +1,13 @@
+﻿filename,column,unit,description
+radar_data.csv,Frame Number,,Radar processing-frame index. All detected points belonging to the same radar processing frame share this value.
+radar_data.csv,X,m,Lateral (cross-range) coordinate of the detected point in the radar Cartesian coordinate frame.
+radar_data.csv,Y,m,Forward-range (depth) coordinate of the detected point in the radar Cartesian coordinate frame.
+radar_data.csv,Z,m,Vertical (elevation) coordinate of the detected point in the radar Cartesian coordinate frame.
+radar_data.csv,velocity,m/s,Radial Doppler velocity of the detected point relative to the radar sensor.
+radar_data.csv,snr,dB,Signal-to-noise ratio of the detected radar reflection.
+radar_data.csv,timestamp,s,"Unix epoch timestamp, in seconds, associated with the radar processing frame."
+radar_data.csv,target_id,,Target-tracker association identifier: 0-252 denote tracked targets; 253-255 denote noise or untracked points; and -1 denotes an unassigned point.
+frame_labels.csv,Frame,,Camera-frame index for which an activity annotation is provided.
+frame_labels.csv,Label,,Activity label assigned to the corresponding camera frame. Label names are defined in metadata/label_taxonomy.csv.
+timestamps.csv,Frame,,Camera-frame index used to associate camera-derived activity annotations with timestamps.
+timestamps.csv,Timestamp,s,"Unix epoch timestamp, in seconds, associated with the corresponding camera frame. This timestamp can be matched with radar_data.csv timestamps to project camera-frame labels onto radar frames."
