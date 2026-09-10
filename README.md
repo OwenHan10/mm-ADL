@@ -74,6 +74,7 @@ For the sit and fall protocols, repetitions are approximately evenly distributed
 mm-ADL-v1.0/
 ├── README.md
 ├── DATA_FORMAT.md
+├── LICENSE-DATA
 ├── recordings/
 │   └── sub-XX/protocol-<name>/run-YY/
 │       ├── radar_data.csv
@@ -133,15 +134,18 @@ Participant identifiers are pseudonymous, and the synchronized camera videos use
 If you use the mm-ADL dataset, please cite **both** the dataset record and its
 associated paper:
 
-1. **Dataset:**  
-   > Han, Z., Wang, X., & Bolic, M. (2026). mm-ADL: A Millimeter-Wave Radar Point-Cloud Dataset for Activities of Daily Living and Fall-Related Movements [Dataset]. Zenodo. https://doi.org/10.5281/zenodo.22405011
+1. **Dataset:**  Han, Z., Wang, X., & Bolic, M. (2026). mm-ADL: A Millimeter-Wave Radar Point-Cloud Dataset for Activities of Daily Living and Fall-Related Movements [Dataset]. Zenodo. https://doi.org/10.5281/zenodo.22405011
 
-2. **Associated paper:**  
-   > X. Wang, Z. Han, S. Rhanmouni, C. Zhao, Y. Lu, and
+2. **Associated paper:**  X. Wang, Z. Han, S. Rhanmouni, C. Zhao, Y. Lu, and
    M. Bolic, “Beyond Gait: Person Identification from Millimeter-Wave Point
-   Clouds Across Activities of Daily Living,” *arXiv preprint* arXiv:2609.08818,
-   2026. https://arxiv.org/abs/2609.08818
+   Clouds Across Activities of Daily Living,” *arXiv preprint* arXiv:2609.08818, 2026. https://arxiv.org/abs/2609.08818
 
 ## License
 
-The dataset license will be specified before public release.
+The mm-ADL dataset is licensed under the
+[Creative Commons Attribution 4.0 International License (CC BY 4.0)](
+https://creativecommons.org/licenses/by/4.0/).
+
+When using the dataset, please provide appropriate attribution and cite both the
+Zenodo dataset record and the associated paper as described in the
+[Citation](#citation) section.
