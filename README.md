@@ -1,18 +1,19 @@
 # mm-ADL
 
-**mm-ADL** is a synchronized millimeter-wave (mmWave) radar point-cloud dataset for activities of daily living (ADLs) and fall-related movements. It preserves complete recording runs, camera-derived frame annotations, and the timestamps needed to project those annotations to radar frames. This raw-run design lets researchers choose their own radar-frame alignment, temporal segmentation, and evaluation protocol.
+**mm-ADL** is a millimeter-wave (mmWave) radar point-cloud dataset for activities of daily living (ADLs) and fall-related movements. It provides complete recording runs and camera-derived annotations that can be aligned to radar timestamps. Researchers can choose their own segmentation and evaluation protocols.
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22405011.svg)](https://doi.org/10.5281/zenodo.22405011)
 [![arXiv](https://img.shields.io/badge/arXiv-2609.08818-b31b1b.svg)](https://arxiv.org/abs/2609.08818)
 
 ## Full dataset download
 
-The complete mm-ADL release, including all raw recording runs, is hosted on
-[Zenodo](https://doi.org/10.5281/zenodo.22405011).
+Download the complete release, including the `recordings/` directory, from
+[Zenodo](https://doi.org/10.5281/zenodo.22405011). The GitHub repository contains
+documentation, metadata, radar configuration, and processing scripts; it does
+not duplicate the recordings.
 
-This GitHub repository provides the documentation, metadata, radar configuration,
-and reference processing scripts. It does not duplicate the full `recordings/`
-directory.
+For the recording layout, CSV schemas, and alignment rules, see
+[DATA_FORMAT.md](DATA_FORMAT.md).
 
 ## Associated publication
 
@@ -32,7 +33,7 @@ mm-ADL is introduced in the following paper:
 | Setting | Controlled 4 m × 8 m indoor room |
 | Modality | Time-series mmWave radar point clouds |
 | Recording unit | Complete participant–protocol–run recording |
-| Collection protocols | Random walking, chair-sitting, bed/sofa-lying, and fall-and-recovery sequences |
+| Collection protocols | Walk, sit, lie, and fall |
 | Frame-level classes | 10 activity and posture classes |
 | Video release | Synchronized RGB video was used for annotation but is not distributed |
 
@@ -40,46 +41,18 @@ mm-ADL is introduced in the following paper:
 
 Data were acquired using the Texas Instruments (TI) **IWR6843ISK-ODS** antenna board with an **MMWAVEICBOOST** carrier board. The radar was mounted on a camera tripod at a height of approximately 1.5 m. Its boresight was perpendicular to the ground; no tilt angle was used.
 
-The exact acquisition configuration is provided in `metadata/radar_configuration/<radar-configuration-file>.cfg`.
+The acquisition configuration is in `metadata/radar_configuration/`. The
+four collection protocols are distinct from the ten frame-level classes; see
+`metadata/protocol_definitions.csv` and `metadata/label_taxonomy.csv` for their
+definitions.
 
-## Activity taxonomy
-
-The release uses the following frame-level taxonomy. The raw labels in `frame_labels.csv` are mapped to these display names in `metadata/label_taxonomy.csv`.
-
-| Class ID | Display name |
-|---:|---|
-| 0 | Standing/Walking |
-| 1 | Falling |
-| 2 | Floor-to-Stand |
-| 3 | Stand-to-Sit |
-| 4 | Sit-to-Lie |
-| 5 | Lie-to-Sit |
-| 6 | Sit-to-Stand |
-| 7 | Sitting |
-| 8 | Lying Down |
-| 9 | Lying-on-Floor |
-
-The four collection protocols are not the same as the frame-level classes:
-
-- **walk:** approximately five minutes of random wandering with random turns and halts;
-- **sit:** walk to a chair, sit down, remain seated briefly, stand up, and return; repeated approximately 50 times;
-- **lie:** walk to a sofa or bed, lie down, remain lying briefly, get up, and return; repeated approximately 50 times; and
-- **fall:** walk to the room center, fall, remain lying on the floor briefly, stand up, and return; repeated approximately 50 times.
-
-For the sit and fall protocols, repetitions are approximately evenly distributed among front-facing, left-side-facing, and right-side-facing orientations relative to the sensor. For the lie protocol, repetitions are approximately evenly distributed between left-side-facing and right-side-facing orientations.
-
-## Zenodo release layout
+## Repository contents
 
 ```text
-mm-ADL-v1.0/
+mm-ADL/
 ├── README.md
 ├── DATA_FORMAT.md
 ├── LICENSE-DATA
-├── recordings/
-│   └── sub-XX/protocol-<name>/run-YY/
-│       ├── radar_data.csv
-│       ├── frame_labels.csv
-│       └── timestamps.csv
 ├── metadata/
 │   ├── recording_manifest.csv
 │   ├── protocol_definitions.csv
@@ -88,32 +61,73 @@ mm-ADL-v1.0/
 │   └── radar_configuration/
 │       └── <radar-configuration-file>.cfg
 └── scripts/
-    └── align_camera_labels_to_radar.py
+    ├── align_camera_labels_to_radar.py
+    ├── align_video_labels_to_radar.py
+    └── visualize_labeled_radar_pointcloud.py
 ```
 
-Each run contains a synchronized three-file unit:
+The full Zenodo release also contains `recordings/sub-XX/protocol-<name>/run-YY/`.
+Each run has `radar_data.csv`, `frame_labels.csv`, and `timestamps.csv`; see
+[DATA_FORMAT.md](DATA_FORMAT.md) for their fields and relationship.
 
-- `radar_data.csv` contains radar point-cloud observations;
-- `frame_labels.csv` contains activity labels in the camera-frame domain; and
-- `timestamps.csv` maps camera frames to Unix timestamps.
+## Label and visualize radar point clouds
 
-See [DATA_FORMAT.md](DATA_FORMAT.md) for the exact file schemas and the camera-to-radar label-projection procedure.
+Install the required Python packages (`pandas` and `matplotlib`), then run the
+following commands from the repository root. The release does not include fixed
+windows or directly labeled radar frames.
 
-## Generate labelled radar point clouds
+### Batch label alignment
 
-The raw data are intentionally not distributed as fixed windows or directly labelled radar frames. To project camera-derived labels onto each radar run, run:
-
-```bash
-python scripts/align_camera_labels_to_radar.py --dataset-root /path/to/mm-ADL-v1.0
-```
-
-The script leaves `recordings/` unchanged and writes derived files to:
+`align_camera_labels_to_radar.py` processes the full release or an individual
+recording directory. It leaves the raw files unchanged and writes labeled CSVs to:
 
 ```text
 derived/camera_to_radar_labels/sub-XX/protocol-<name>/run-YY/radar_data_labeled.csv
 ```
 
-Use `--overwrite` to regenerate existing derived files. See `python scripts/align_camera_labels_to_radar.py --help` for options.
+Process the complete release:
+
+```bash
+python scripts/align_camera_labels_to_radar.py --dataset-root /path/to/mm-ADL-v1.0
+```
+
+Use `--overwrite` to regenerate existing output. For individual-recording
+options, run:
+
+```bash
+python scripts/align_camera_labels_to_radar.py --help
+```
+
+### Single-recording label alignment
+
+`align_video_labels_to_radar.py` is the original, step-by-step reference
+implementation for aligning one recording run at a time. It produces the same
+labeled output format as the batch script and includes more inline comments for
+readers who want to understand the alignment procedure.
+
+```bash
+python scripts/align_video_labels_to_radar.py \
+  --dataset-root /path/to/mm-ADL-v1.0 \
+  --subject sub-01 \
+  --protocol protocol-fall \
+  --run run-01
+```
+
+### Visualization
+
+`visualize_labeled_radar_pointcloud.py` animates the labeled 3D radar point
+cloud of one recording run. Run either alignment script first.
+
+```bash
+python scripts/visualize_labeled_radar_pointcloud.py \
+  --dataset-root /path/to/mm-ADL-v1.0 \
+  --subject sub-01 \
+  --protocol protocol-fall \
+  --run run-01
+```
+
+The animation shows the activity label and colors the dominant tracked target
+blue and other points red.
 
 ## Intended research uses
 
@@ -125,9 +139,9 @@ mm-ADL is intended for research on:
 - person identification and re-identification from radar point clouds; and
 - representation learning for radar-based human sensing.
 
-## Privacy and responsible use
+## Privacy
 
-Participant identifiers are pseudonymous, and the synchronized camera videos used for annotation are not released. An example RGB video illustrating the experimental protocol may be made available upon request to the corresponding author of the associated study. Nevertheless, radar point clouds can contain behavioral or biometric information. Users must follow the release license and applicable ethical, institutional, and legal requirements, and must not attempt to identify participants outside the scope of authorized research.
+Participant identifiers are pseudonymous, and the synchronized camera videos used for annotation are not released. An example RGB video illustrating the experimental protocol may be made available upon request to the corresponding author of the associated study. 
 
 ## Citation
 
